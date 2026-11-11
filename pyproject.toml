@@ -1,0 +1,29 @@
+[project]
+name = "multivariates"
+version = "0.1.0"
+description = "Add your description here"
+readme = "README.md"
+authors = [
+    { name = "PEPERROMI", email = "a01668319@tec.mx" }
+]
+requires-python = ">=3.12"
+dependencies = [
+    "fg-data-profiling[notebook]>=4.20.0",
+    "matplotlib>=3.11.2",
+    "numpy>=2.5.4",
+    "openpyxl>=3.1.5",
+    "pandas>=2.2,<3",
+    "seaborn>=0.13.2",
+]
+
+[project.scripts]
+multivariates = "multivariates:main"
+
+[build-system]
+requires = ["uv_build>=0.13.0,<0.14.0"]
+build-backend = "uv_build"
+
+[dependency-groups]
+dev = [
+    "pytest>=9.2.0",
+]

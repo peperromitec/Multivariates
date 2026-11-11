@@ -1,0 +1,84 @@
+
+# =========================
+# PYTHON
+# =========================
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+
+# =========================
+# ENVIRONMENTS
+# =========================
+.venv/
+venv/
+env/
+ENV/
+
+# =========================
+# ENVIRONMENT VARIABLES
+# =========================
+.env
+.env.*
+!.env.example
+
+# =========================
+# JUPYTER
+# =========================
+.ipynb_checkpoints/
+
+# =========================
+# IDEs
+# =========================
+.vscode/
+.idea/
+*.swp
+
+# =========================
+# TESTING / COVERAGE
+# =========================
+.pytest_cache/
+.coverage
+htmlcov/
+.tox/
+
+# =========================
+# BUILD / DISTRIBUTION
+# =========================
+build/
+dist/
+*.egg-info/
+
+# =========================
+# LOGS
+# =========================
+*.log
+logs/
+
+# =========================
+# OS FILES
+# =========================
+.DS_Store
+Thumbs.db
+desktop.ini
+
+# =========================
+# TEMPORARY FILES
+# =========================
+*.tmp
+*.bak
+*.orig
+
+# =========================
+# MACHINE LEARNING
+# =========================
+mlruns/
+wandb/
+lightning_logs/
+checkpoints/
+
+# =========================
+# GENERATED OUTPUTS
+# =========================
+outputs/
+reports/generated/
