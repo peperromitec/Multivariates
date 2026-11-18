@@ -1,0 +1,46 @@
+row_key,original_customer_id,original_index,field,previous_value,new_value,policy_id,action,reason
+row-00000000,DUP-01,0,antiguedad_meses,120.0,0,CRO-01,corregir,completar o acotar a cronología bancaria
+row-00000000,DUP-01,0,tarjeta_santander,World Elite,LikeU,TAR-01,corregir,producto faltante/desconocido/inelegible; se conserva ingreso válido
+row-00000000,DUP-01,0,gasto_mensual,20000.0,0.0,CON-01,corregir,cero compras en el mismo periodo; convención de inactividad
+row-00000000,DUP-01,0,ecommerce_pct,80.0,0.0,CON-01,corregir,cero compras en el mismo periodo; convención de inactividad
+row-00000000,DUP-01,0,uso_tarjeta_pct,60.0,0.0,CON-01,corregir,cero compras en el mismo periodo; convención de inactividad
+row-00000000,DUP-01,0,app_logins_mes,-3.0,14,DIG-01,corregir,afinidad digital compartida y variación individual
+row-00000000,DUP-01,0,satisfaccion,6.0,2.3,EXP-01,corregir,"experiencia, comportamiento de pago o preferencias con ruido individual"
+row-00000000,DUP-01,0,nps,12.0,5,EXP-01,corregir,"experiencia, comportamiento de pago o preferencias con ruido individual"
+row-00000000,DUP-01,0,pagos_puntuales_pct,101.0,75.38,EXP-01,corregir,"experiencia, comportamiento de pago o preferencias con ruido individual"
+row-00000000,DUP-01,0,activacion_promos_pct,-5.0,76.84,EXP-01,corregir,"experiencia, comportamiento de pago o preferencias con ruido individual"
+row-00000000,DUP-01,0,abandono_riesgo,1.2,0.578028,RIE-01,corregir,"score faltante/inválido u obsoleto al cambiar satisfacción, NPS o puntualidad"
+row-00000001,DUP-01,1,customer_id,DUP-01,SYN-00000000,DOM-01,corregir,"ID faltante, no textual o duplicado; clave de fila conserva identidad original"
+row-00000002,,2,customer_id,,SYN-00000001,DOM-01,completar,"ID faltante, no textual o duplicado; clave de fila conserva identidad original"
+row-00000002,,2,antiguedad_meses,200.0,144,CRO-01,corregir,completar o acotar a cronología bancaria
+row-00000002,,2,segmento,,Premier,SEG-01,completar,"elección por capacidad y relación, sin restricción por tarjeta"
+row-00000002,,2,tarjeta_santander,,Free,TAR-01,completar,producto faltante/desconocido/inelegible; se conserva ingreso válido
+row-00000002,,2,transacciones_mes,-4.0,17,CON-01,corregir,frecuencia condicionada al perfil y rama de actividad
+row-00000002,,2,gasto_mensual,-10.0,5842.05,CON-01,corregir,derivado obsoleto o inválido; ticket condicionado al perfil DEMO
+row-00000002,,2,ecommerce_pct,120.0,23.67,DIG-01,corregir,afinidad digital compartida y variación individual
+row-00000002,,2,pagos_puntuales_pct,,61.75,EXP-01,completar,"experiencia, comportamiento de pago o preferencias con ruido individual"
+row-00000002,,2,uso_tarjeta_pct,150.0,52.66,USO-01,corregir,intensidad sintética faltante/inválida u obsoleta al cambiar compras
+row-00000002,,2,abandono_riesgo,0.2,0.20816,RIE-01,corregir,"score faltante/inválido u obsoleto al cambiar satisfacción, NPS o puntualidad"
+row-00000004,INVALID-05,4,edad,abc,37,INI-01,corregir,faltante o fuera de dominio; marginal empírica o DEMO
+row-00000004,INVALID-05,4,ingreso_mensual,-500.0,16325.86,INI-01,corregir,faltante o fuera de dominio; marginal empírica o DEMO
+row-00000004,INVALID-05,4,antiguedad_meses,-2.0,0,CRO-01,corregir,completar o acotar a cronología bancaria
+row-00000004,INVALID-05,4,segmento,Otro,Select,SEG-01,corregir,"elección por capacidad y relación, sin restricción por tarjeta"
+row-00000004,INVALID-05,4,tarjeta_santander,Producto desconocido,Free,TAR-01,corregir,producto faltante/desconocido/inelegible; se conserva ingreso válido
+row-00000004,INVALID-05,4,transacciones_mes,3.5,10,CON-01,corregir,frecuencia condicionada al perfil y rama de actividad
+row-00000004,INVALID-05,4,gasto_mensual,1200.0,3428.57,CON-01,corregir,derivado obsoleto o inválido; ticket implícito conservado de las compras originales
+row-00000004,INVALID-05,4,uso_tarjeta_pct,,46.89,USO-01,completar,intensidad sintética faltante/inválida u obsoleta al cambiar compras
+row-00000005,EMPTY-06,5,edad,,41,INI-01,completar,faltante o fuera de dominio; marginal empírica o DEMO
+row-00000005,EMPTY-06,5,ingreso_mensual,,13117.42,INI-01,completar,faltante o fuera de dominio; marginal empírica o DEMO
+row-00000005,EMPTY-06,5,antiguedad_meses,,67,CRO-01,completar,completar o acotar a cronología bancaria
+row-00000005,EMPTY-06,5,segmento,,Mass,SEG-01,completar,"elección por capacidad y relación, sin restricción por tarjeta"
+row-00000005,EMPTY-06,5,tarjeta_santander,,LikeU,TAR-01,completar,producto faltante/desconocido/inelegible; se conserva ingreso válido
+row-00000005,EMPTY-06,5,transacciones_mes,,33,CON-01,completar,frecuencia condicionada al perfil y rama de actividad
+row-00000005,EMPTY-06,5,gasto_mensual,,2725.8,CON-01,completar,derivado obsoleto o inválido; ticket condicionado al perfil DEMO
+row-00000005,EMPTY-06,5,ecommerce_pct,,37.59,DIG-01,completar,afinidad digital compartida y variación individual
+row-00000005,EMPTY-06,5,app_logins_mes,,0,DIG-01,completar,afinidad digital compartida y variación individual
+row-00000005,EMPTY-06,5,satisfaccion,,4.17,EXP-01,completar,"experiencia, comportamiento de pago o preferencias con ruido individual"
+row-00000005,EMPTY-06,5,nps,,8,EXP-01,completar,"experiencia, comportamiento de pago o preferencias con ruido individual"
+row-00000005,EMPTY-06,5,pagos_puntuales_pct,,68.64,EXP-01,completar,"experiencia, comportamiento de pago o preferencias con ruido individual"
+row-00000005,EMPTY-06,5,activacion_promos_pct,,66.12,EXP-01,completar,"experiencia, comportamiento de pago o preferencias con ruido individual"
+row-00000005,EMPTY-06,5,uso_tarjeta_pct,,98.28,USO-01,completar,intensidad sintética faltante/inválida u obsoleta al cambiar compras
+row-00000005,EMPTY-06,5,abandono_riesgo,,0.26481,RIE-01,completar,"score faltante/inválido u obsoleto al cambiar satisfacción, NPS o puntualidad"

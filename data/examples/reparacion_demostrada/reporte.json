@@ -1,0 +1,724 @@
+{
+  "operation": "reparar",
+  "rows": 6,
+  "seed": 2026,
+  "operation_index": 0,
+  "rng": "PCG64",
+  "versions": {
+    "policies": "0.1.0",
+    "python": "3.15.0",
+    "numpy": "2.5.4",
+    "pandas": "3.1.1"
+  },
+  "code_sha256": "98084ee0f5c5ee776dc02c56d7ea4307eb995e6c532e5d31f18f9b4b9a3c8a6b",
+  "configuration_sha256": "73f9fd862b2b2cefa91aaadea4ac13a9fdd42dc88c889101a8e4ebced388b7e3",
+  "configuration": {
+    "version": "0.1.0",
+    "scenario": "demostracion_academica_no_politica_bancaria",
+    "catalog_source": "dataset_dummy.xlsx: dataset_dummy_tarjetas_santande; nombres de los registros, no sustituciones comerciales",
+    "conventions": {
+      "money": "MXN por persona por mes; ingreso actual aproxima elegibilidad al contratar",
+      "counts": "mes sintético concreto: compras y accesos enteros; se aparta del promedio de compras del glosario",
+      "percentages": "0 a 100; el glosario usa ejemplos fraccionarios pero los registros están en esta escala",
+      "usage": "intensidad sintética 0 a 100; no utilización del límite ni cociente compras/límite",
+      "tenure": "relación con el banco; no fecha de contratación de la tarjeta; años de edad completos, cota conservadora",
+      "risk": "score estocástico de simulación; no probabilidad calibrada",
+      "repair": "conservar elecciones válidas; recalcular derivados obsoletos; no impone relaciones nuevas a registros válidos"
+    },
+    "policies": {
+      "DOM-01": {
+        "description": "Dominios, identificadores únicos y esquema de 16 columnas",
+        "type": "obligatorio",
+        "variables": [
+          "customer_id",
+          "edad",
+          "segmento",
+          "antiguedad_meses",
+          "ingreso_mensual",
+          "tarjeta_santander",
+          "uso_tarjeta_pct",
+          "transacciones_mes",
+          "gasto_mensual",
+          "ecommerce_pct",
+          "pagos_puntuales_pct",
+          "app_logins_mes",
+          "nps",
+          "satisfaccion",
+          "abandono_riesgo",
+          "activacion_promos_pct"
+        ],
+        "origin": "Esquema y escalas: dataset_dummy.xlsx / Glosario Tarjetas y consigna; cotas de edad y conteos: supuesto del equipo DEMO",
+        "parameters": {
+          "id_prefix": "SYN-",
+          "segments": [
+            "Mass",
+            "Select",
+            "Premier"
+          ],
+          "numeric": {
+            "edad": {
+              "min": 18,
+              "max": 100,
+              "integer": true
+            },
+            "antiguedad_meses": {
+              "min": 0,
+              "max": 1200,
+              "integer": true
+            },
+            "ingreso_mensual": {
+              "min": 0,
+              "max": 1000000000,
+              "integer": false
+            },
+            "uso_tarjeta_pct": {
+              "min": 0,
+              "max": 100,
+              "integer": false
+            },
+            "transacciones_mes": {
+              "min": 0,
+              "max": 10000,
+              "integer": true
+            },
+            "gasto_mensual": {
+              "min": 0,
+              "max": 1000000000,
+              "integer": false
+            },
+            "ecommerce_pct": {
+              "min": 0,
+              "max": 100,
+              "integer": false
+            },
+            "pagos_puntuales_pct": {
+              "min": 0,
+              "max": 100,
+              "integer": false
+            },
+            "app_logins_mes": {
+              "min": 0,
+              "max": 10000,
+              "integer": true
+            },
+            "nps": {
+              "min": 0,
+              "max": 10,
+              "integer": true
+            },
+            "satisfaccion": {
+              "min": 1,
+              "max": 5,
+              "integer": false
+            },
+            "abandono_riesgo": {
+              "min": 0,
+              "max": 1,
+              "integer": false
+            },
+            "activacion_promos_pct": {
+              "min": 0,
+              "max": 100,
+              "integer": false
+            }
+          }
+        }
+      },
+      "INI-01": {
+        "description": "Muestreo inicial empírico si se proporciona referencia; mezcla de demostración en otro caso",
+        "type": "probabilistico",
+        "variables": [
+          "edad",
+          "ingreso_mensual"
+        ],
+        "origin": "Referencia dummy opcional para marginales; en su ausencia, supuesto del equipo DEMO",
+        "parameters": {
+          "age_bins": [
+            [
+              18,
+              29
+            ],
+            [
+              30,
+              49
+            ],
+            [
+              50,
+              69
+            ],
+            [
+              70,
+              90
+            ]
+          ],
+          "age_weights": [
+            0.23,
+            0.43,
+            0.27,
+            0.07
+          ],
+          "income_zero_probability": 0.02,
+          "income_medians": [
+            12000,
+            30000,
+            85000
+          ],
+          "income_sigmas": [
+            0.45,
+            0.5,
+            0.6
+          ],
+          "income_weights": [
+            0.5,
+            0.4,
+            0.1
+          ]
+        }
+      },
+      "CRO-01": {
+        "description": "Antigüedad limitada por edad de inicio de relación bancaria",
+        "type": "obligatorio",
+        "variables": [
+          "antiguedad_meses"
+        ],
+        "origin": "Supuesto del equipo DEMO; no requisito de contratación de tarjeta",
+        "parameters": {
+          "relationship_start_age": 18,
+          "beta": [
+            1.5,
+            3.0
+          ]
+        }
+      },
+      "AUX-01": {
+        "description": "Perfil compartido de preferencias, actividad, experiencia, pago y afinidad digital",
+        "type": "probabilistico",
+        "variables": [
+          "segmento",
+          "tarjeta_santander",
+          "transacciones_mes",
+          "gasto_mensual",
+          "ecommerce_pct",
+          "app_logins_mes",
+          "nps",
+          "satisfaccion",
+          "pagos_puntuales_pct",
+          "activacion_promos_pct",
+          "abandono_riesgo"
+        ],
+        "origin": "Beneficios cualitativos: dataset_dummy.xlsx / Glosario Tarjetas; relaciones y magnitudes: supuesto del equipo DEMO",
+        "parameters": {
+          "digital_beta": [
+            2.0,
+            2.0
+          ],
+          "activity_beta": [
+            2.0,
+            2.0
+          ],
+          "experience_beta": [
+            3.0,
+            1.8
+          ],
+          "payment_beta": [
+            8.0,
+            1.5
+          ],
+          "preferences": [
+            "cashback",
+            "simplicidad",
+            "viajes",
+            "hoteles"
+          ],
+          "preference_alpha": [
+            2.0,
+            2.0,
+            1.5,
+            1.2
+          ],
+          "observed_anchor_weight": 0.7
+        }
+      },
+      "TAR-01": {
+        "description": "Filtrar elegibilidad antes de ponderar afinidades; cualquier segmento admite cualquier elegible",
+        "type": "obligatorio",
+        "variables": [
+          "tarjeta_santander"
+        ],
+        "origin": "Nombres de registros dummy y beneficios del glosario; TODOS los mínimos, pesos y factores son supuestos DEMO, no requisitos oficiales",
+        "parameters": {
+          "affinity_strength": 3.0,
+          "products": [
+            {
+              "name": "LikeU",
+              "min_income": 0,
+              "min_age": 18,
+              "weight": 0.25,
+              "benefit": "cashback",
+              "consumption_factor": 1.1
+            },
+            {
+              "name": "Free",
+              "min_income": 0,
+              "min_age": 18,
+              "weight": 0.2,
+              "benefit": "simplicidad",
+              "consumption_factor": 0.85
+            },
+            {
+              "name": "Aeromexico Blanca",
+              "min_income": 10000,
+              "min_age": 18,
+              "weight": 0.12,
+              "benefit": "viajes",
+              "consumption_factor": 1.0
+            },
+            {
+              "name": "Aeromexico Platinum",
+              "min_income": 40000,
+              "min_age": 18,
+              "weight": 0.08,
+              "benefit": "viajes",
+              "consumption_factor": 1.3
+            },
+            {
+              "name": "Santander Gold",
+              "min_income": 20000,
+              "min_age": 18,
+              "weight": 0.1,
+              "benefit": "simplicidad",
+              "consumption_factor": 1.05
+            },
+            {
+              "name": "Santander Platinum",
+              "min_income": 50000,
+              "min_age": 18,
+              "weight": 0.1,
+              "benefit": "viajes",
+              "consumption_factor": 1.3
+            },
+            {
+              "name": "World Elite",
+              "min_income": 100000,
+              "min_age": 18,
+              "weight": 0.03,
+              "benefit": "viajes",
+              "consumption_factor": 1.5
+            },
+            {
+              "name": "Fiesta Rewards Oro",
+              "min_income": 15000,
+              "min_age": 18,
+              "weight": 0.07,
+              "benefit": "hoteles",
+              "consumption_factor": 1.1
+            },
+            {
+              "name": "Fiesta Rewards Platinum",
+              "min_income": 45000,
+              "min_age": 18,
+              "weight": 0.05,
+              "benefit": "hoteles",
+              "consumption_factor": 1.35
+            }
+          ]
+        }
+      },
+      "SEG-01": {
+        "description": "Segmento condicionado a ingreso y relación; independiente de la tarjeta a igualdad de perfil",
+        "type": "probabilistico",
+        "variables": [
+          "segmento"
+        ],
+        "origin": "Categorías y frecuencias opcionales: referencia dummy; efectos: supuesto del equipo DEMO",
+        "parameters": {
+          "prior_weights": [
+            0.74,
+            0.03,
+            0.23
+          ],
+          "income_thresholds": [
+            20000,
+            60000
+          ],
+          "tier_factors": [
+            [
+              1.0,
+              0.15,
+              0.4
+            ],
+            [
+              0.6,
+              3.0,
+              1.5
+            ],
+            [
+              0.2,
+              12.0,
+              2.0
+            ]
+          ],
+          "tenure_scale": 120,
+          "tenure_boost": [
+            0.0,
+            1.0,
+            0.7
+          ]
+        }
+      },
+      "CON-01": {
+        "description": "Rama inactiva o compras conjuntas desde actividad, ingreso, beneficios y ticket medio",
+        "type": "probabilistico",
+        "variables": [
+          "transacciones_mes",
+          "gasto_mensual"
+        ],
+        "origin": "Definiciones: glosario dummy; mecanismo y coeficientes: supuesto del equipo DEMO",
+        "parameters": {
+          "inactive_probability": 0.12,
+          "activity_protection": 0.6,
+          "frequency_base": 6.0,
+          "frequency_income_scale": 15000,
+          "frequency_income_weight": 5.0,
+          "frequency_activity_weight": 16.0,
+          "ticket_base": 100,
+          "ticket_income_weight": 0.015,
+          "ticket_activity_weight": 0.4,
+          "ticket_sigma": 0.65,
+          "zero_when_inactive": [
+            "gasto_mensual",
+            "ecommerce_pct",
+            "uso_tarjeta_pct"
+          ]
+        }
+      },
+      "DIG-01": {
+        "description": "Afinidad compartida con ruido y barrera de cero accesos; ecommerce no obliga a abrir app",
+        "type": "probabilistico",
+        "variables": [
+          "ecommerce_pct",
+          "app_logins_mes"
+        ],
+        "origin": "Supuesto del equipo DEMO",
+        "parameters": {
+          "ecommerce_noise": 0.18,
+          "app_zero_probability": 0.15,
+          "app_base": 0.5,
+          "app_digital_weight": 22.0
+        }
+      },
+      "EXP-01": {
+        "description": "Experiencia común para satisfacción y recomendación con discrepancias; pago independiente de ingreso",
+        "type": "probabilistico",
+        "variables": [
+          "satisfaccion",
+          "nps",
+          "pagos_puntuales_pct",
+          "activacion_promos_pct"
+        ],
+        "origin": "Supuesto del equipo DEMO",
+        "parameters": {
+          "satisfaction_noise": 0.12,
+          "nps_noise": 0.22,
+          "payment_noise": 0.08,
+          "promo_intercept": 0.05,
+          "promo_digital_weight": 0.5,
+          "promo_benefit_weight": 0.4,
+          "promo_noise": 0.15
+        }
+      },
+      "USO-01": {
+        "description": "Intensidad sintética desde frecuencia, actividad y ruido; cero en inactividad",
+        "type": "probabilistico",
+        "variables": [
+          "uso_tarjeta_pct"
+        ],
+        "origin": "Convención provisional del equipo ante definición ambigua del glosario; DEMO",
+        "parameters": {
+          "frequency_scale": 25.0,
+          "activity_weight": 0.2,
+          "noise": 0.08
+        }
+      },
+      "RIE-01": {
+        "description": "Score logístico de simulación, recalculado si cambian sus entradas",
+        "type": "probabilistico",
+        "variables": [
+          "abandono_riesgo"
+        ],
+        "origin": "Supuesto del equipo DEMO; sin abandonos observados ni calibración",
+        "parameters": {
+          "intercept": 1.5,
+          "satisfaction_weight": -2.0,
+          "nps_weight": -1.0,
+          "payment_weight": -0.6,
+          "noise": 0.5
+        }
+      }
+    },
+    "dependencies": {
+      "customer_id": [],
+      "edad": [],
+      "ingreso_mensual": [],
+      "antiguedad_meses": [
+        "edad"
+      ],
+      "segmento": [
+        "ingreso_mensual",
+        "antiguedad_meses"
+      ],
+      "tarjeta_santander": [
+        "ingreso_mensual",
+        "edad"
+      ],
+      "transacciones_mes": [
+        "ingreso_mensual",
+        "tarjeta_santander"
+      ],
+      "gasto_mensual": [
+        "transacciones_mes",
+        "ingreso_mensual",
+        "tarjeta_santander"
+      ],
+      "ecommerce_pct": [
+        "transacciones_mes"
+      ],
+      "app_logins_mes": [],
+      "satisfaccion": [],
+      "nps": [],
+      "pagos_puntuales_pct": [],
+      "activacion_promos_pct": [
+        "tarjeta_santander"
+      ],
+      "uso_tarjeta_pct": [
+        "transacciones_mes"
+      ],
+      "abandono_riesgo": [
+        "satisfaccion",
+        "nps",
+        "pagos_puntuales_pct"
+      ]
+    },
+    "stale_dependencies": {
+      "gasto_mensual": [
+        "transacciones_mes"
+      ],
+      "uso_tarjeta_pct": [
+        "transacciones_mes"
+      ],
+      "abandono_riesgo": [
+        "satisfaccion",
+        "nps",
+        "pagos_puntuales_pct"
+      ]
+    }
+  },
+  "input": {
+    "kind": "CSV a reparar; no referencia",
+    "path": "data/examples/clientes_inconsistentes.csv",
+    "sha256": "f31d3c58081a3f206e4c499c7b5912a3854f795ebbd100ab582643dde95a09f0"
+  },
+  "reference": {
+    "kind": "sin_referencia_distribuciones_DEMO",
+    "source": "config.demo.json / supuestos del equipo",
+    "external_sources": "Sin INEGI ni fuentes externas descargadas; adaptadores ENIGH/ENIF documentados en README"
+  },
+  "parameter_origins": {
+    "DOM-01": "Esquema y escalas: dataset_dummy.xlsx / Glosario Tarjetas y consigna; cotas de edad y conteos: supuesto del equipo DEMO",
+    "INI-01": "Referencia dummy opcional para marginales; en su ausencia, supuesto del equipo DEMO",
+    "CRO-01": "Supuesto del equipo DEMO; no requisito de contratación de tarjeta",
+    "AUX-01": "Beneficios cualitativos: dataset_dummy.xlsx / Glosario Tarjetas; relaciones y magnitudes: supuesto del equipo DEMO",
+    "TAR-01": "Nombres de registros dummy y beneficios del glosario; TODOS los mínimos, pesos y factores son supuestos DEMO, no requisitos oficiales",
+    "SEG-01": "Categorías y frecuencias opcionales: referencia dummy; efectos: supuesto del equipo DEMO",
+    "CON-01": "Definiciones: glosario dummy; mecanismo y coeficientes: supuesto del equipo DEMO",
+    "DIG-01": "Supuesto del equipo DEMO",
+    "EXP-01": "Supuesto del equipo DEMO",
+    "USO-01": "Convención provisional del equipo ante definición ambigua del glosario; DEMO",
+    "RIE-01": "Supuesto del equipo DEMO; sin abandonos observados ni calibración"
+  },
+  "effective_sampling_sources": {
+    "edad": "configuración DEMO",
+    "ingreso_mensual": "configuración DEMO",
+    "antiguedad_meses": "configuración DEMO",
+    "card_base_weights": "configuración DEMO",
+    "segment_base_weights": "configuración DEMO",
+    "dependent_fields": "políticas condicionales y coeficientes DEMO; no se conserva exactamente cada marginal de referencia"
+  },
+  "missing_before": {
+    "customer_id": 1,
+    "edad": 1,
+    "segmento": 2,
+    "antiguedad_meses": 1,
+    "ingreso_mensual": 1,
+    "tarjeta_santander": 2,
+    "uso_tarjeta_pct": 2,
+    "transacciones_mes": 1,
+    "gasto_mensual": 1,
+    "ecommerce_pct": 1,
+    "pagos_puntuales_pct": 2,
+    "app_logins_mes": 1,
+    "nps": 1,
+    "satisfaccion": 1,
+    "abandono_riesgo": 1,
+    "activacion_promos_pct": 1
+  },
+  "missing_after": {
+    "customer_id": 0,
+    "edad": 0,
+    "segmento": 0,
+    "antiguedad_meses": 0,
+    "ingreso_mensual": 0,
+    "tarjeta_santander": 0,
+    "uso_tarjeta_pct": 0,
+    "transacciones_mes": 0,
+    "gasto_mensual": 0,
+    "ecommerce_pct": 0,
+    "pagos_puntuales_pct": 0,
+    "app_logins_mes": 0,
+    "nps": 0,
+    "satisfaccion": 0,
+    "abandono_riesgo": 0,
+    "activacion_promos_pct": 0
+  },
+  "violations_before": {
+    "total": 43,
+    "by_kind": {
+      "infraccion": 23,
+      "faltante": 20
+    },
+    "by_policy": {
+      "DOM-01": 37,
+      "CON-01": 3,
+      "CRO-01": 2,
+      "TAR-01": 1
+    },
+    "by_field": {
+      "antiguedad_meses": 4,
+      "tarjeta_santander": 4,
+      "uso_tarjeta_pct": 4,
+      "pagos_puntuales_pct": 3,
+      "gasto_mensual": 3,
+      "ecommerce_pct": 3,
+      "segmento": 3,
+      "transacciones_mes": 3,
+      "app_logins_mes": 2,
+      "nps": 2,
+      "satisfaccion": 2,
+      "abandono_riesgo": 2,
+      "activacion_promos_pct": 2,
+      "customer_id": 2,
+      "edad": 2,
+      "ingreso_mensual": 2
+    }
+  },
+  "violations_after": {
+    "total": 0,
+    "by_kind": {},
+    "by_policy": {},
+    "by_field": {}
+  },
+  "changes": {
+    "total": 45,
+    "by_action": {
+      "corregir": 25,
+      "completar": 20
+    },
+    "by_policy": {
+      "CON-01": 9,
+      "EXP-01": 9,
+      "CRO-01": 4,
+      "TAR-01": 4,
+      "DIG-01": 4,
+      "INI-01": 4,
+      "RIE-01": 3,
+      "SEG-01": 3,
+      "USO-01": 3,
+      "DOM-01": 2
+    },
+    "by_field": {
+      "antiguedad_meses": 4,
+      "tarjeta_santander": 4,
+      "gasto_mensual": 4,
+      "uso_tarjeta_pct": 4,
+      "ecommerce_pct": 3,
+      "pagos_puntuales_pct": 3,
+      "abandono_riesgo": 3,
+      "segmento": 3,
+      "transacciones_mes": 3,
+      "app_logins_mes": 2,
+      "satisfaccion": 2,
+      "nps": 2,
+      "activacion_promos_pct": 2,
+      "customer_id": 2,
+      "edad": 2,
+      "ingreso_mensual": 2
+    }
+  },
+  "card_frequencies": {
+    "LikeU": 3,
+    "Free": 3
+  },
+  "income_by_card": {
+    "Free": {
+      "count": 3,
+      "min": 16325.86,
+      "p25": 20662.93,
+      "median": 25000.0,
+      "mean": 63775.28666666666,
+      "p75": 87500.0,
+      "max": 150000.0
+    },
+    "LikeU": {
+      "count": 3,
+      "min": 8000.0,
+      "p25": 10558.71,
+      "median": 13117.42,
+      "mean": 37039.14,
+      "p75": 51558.71,
+      "max": 90000.0
+    }
+  },
+  "limitations": [
+    "Las relaciones son supuestos de simulación; no hallazgos sobre clientes reales",
+    "Correlaciones distintas no prueban realismo",
+    "Los mínimos de ingreso son DEMO y se aplican al ingreso actual",
+    "Reparar datos válidos no les introduce necesariamente nuevas relaciones estadísticas",
+    "Mismo código, versiones, orden, insumos, configuración y semilla en instancia nueva reproducen el resultado"
+  ],
+  "input_columns": [
+    "customer_id",
+    "edad",
+    "segmento",
+    "antiguedad_meses",
+    "ingreso_mensual",
+    "tarjeta_santander",
+    "uso_tarjeta_pct",
+    "transacciones_mes",
+    "gasto_mensual",
+    "ecommerce_pct",
+    "pagos_puntuales_pct",
+    "app_logins_mes",
+    "nps",
+    "satisfaccion",
+    "abandono_riesgo",
+    "activacion_promos_pct"
+  ],
+  "extra_columns_preserved_only_in_draft": [],
+  "artifacts": {
+    "borradores.csv": {
+      "sha256": "db1aad5304ec2f0e52a1d49ba984db3bb637cb90a42c1419ab5c6ff969d3281d"
+    },
+    "clientes.csv": {
+      "sha256": "722d2a4a9894f2b87ded03b6e57f63772f3b139610eede23dd4aa953d30b9d9c"
+    },
+    "auditoria.csv": {
+      "sha256": "c936b38d7525dd2c962270a39c93aa9dec909071694548be27f8372b6112ca4d"
+    },
+    "decisiones.csv": {
+      "sha256": "326980e7061abc49e29930db049e01cb1a68d54971afe0a53f51356ae175078d"
+    },
+    "auxiliares.csv": {
+      "sha256": "4b9c04119f6a8b92695925da6d30716e736e310f53ac99a55a0ad75ef897f2ab"
+    }
+  }
+}
