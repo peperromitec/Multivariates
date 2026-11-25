@@ -1,0 +1,274 @@
+{
+  "verification_date": "2026-11-16",
+  "seed": 2026,
+  "policy_version": "0.1.0",
+  "environment": {
+    "python": "3.15.0",
+    "numpy": "2.5.4",
+    "pandas": "3.1.1",
+    "pytest": "9.1.1",
+    "network_used": false
+  },
+  "execution_environment_note": "Se reutilizaron bibliotecas locales sin instalación. El Python predeterminado carecía de pandas/pytest; se añadieron rutas locales a PYTHONPATH. Pandas validado: 3.1.1; no se resolvió ni modificó el entorno del pyproject.toml (que declara pandas<3).",
+  "local_pythonpath": "/home/vomik/Documents/semestre_5/multy_v/activity_1_tanne/.venv/lib64/python3.15/site-packages",
+  "local_pytest_pythonpath": "/home/vomik/Documents/semestre_5/crypto/dashboard/.venv/lib/python3.14/site-packages",
+  "test_command": "PYTHONPATH=/home/vomik/Documents/semestre_5/multy_v/activity_1_tanne/.venv/lib64/python3.15/site-packages:/home/vomik/Documents/semestre_5/crypto/dashboard/.venv/lib/python3.14/site-packages PYTEST_DISABLE_PLUGIN_AUTOLOAD=1 python -m pytest data/tests -q --junitxml=data/outputs/pruebas_finales.xml",
+  "tests_passed": 30,
+  "subtests_passed": 22,
+  "test_failures": 0,
+  "junit": "data/outputs/pruebas_finales.xml",
+  "demo_commands": [
+    "python -m data.customer_generator extract-reference --input dataset_dummy.xlsx --output data/outputs/referencia_dummy.csv",
+    "python -m data.customer_generator generate --rows 10000 --seed 2026 --output data/outputs/entrega/sin_referencia",
+    "python -m data.customer_generator generate --rows 10000 --seed 2026 --reference data/outputs/referencia_dummy.csv --output data/outputs/demo_referencia_csv",
+    "python -m data.customer_generator repair --input data/examples/clientes_inconsistentes.csv --seed 2026 --output data/outputs/entrega/reparacion",
+    "python -m data.customer_generator repair --input data/outputs/entrega/reparacion/clientes.csv --seed 99 --output data/outputs/entrega/segunda_reparacion",
+    "python -m data.customer_generator repair --input data/examples/clientes_inconsistentes.csv --seed 2026 --output data/examples/reparacion_demostrada"
+  ],
+  "checks": [
+    {
+      "path": "data/outputs/entrega/sin_referencia",
+      "rows": 10000,
+      "changes": {
+        "total": 130000,
+        "by_action": {
+          "completar": 130000
+        },
+        "by_policy": {
+          "EXP-01": 40000,
+          "CON-01": 21672,
+          "DIG-01": 19164,
+          "CRO-01": 10000,
+          "SEG-01": 10000,
+          "TAR-01": 10000,
+          "RIE-01": 10000,
+          "USO-01": 9164
+        },
+        "by_field": {
+          "antiguedad_meses": 10000,
+          "segmento": 10000,
+          "tarjeta_santander": 10000,
+          "transacciones_mes": 10000,
+          "gasto_mensual": 10000,
+          "ecommerce_pct": 10000,
+          "app_logins_mes": 10000,
+          "satisfaccion": 10000,
+          "nps": 10000,
+          "pagos_puntuales_pct": 10000,
+          "activacion_promos_pct": 10000,
+          "uso_tarjeta_pct": 10000,
+          "abandono_riesgo": 10000
+        }
+      },
+      "violations_after": 0,
+      "idempotent_after_csv_roundtrip": true,
+      "artifacts_hashes_verified": true,
+      "code_sha256": "98084ee0f5c5ee776dc02c56d7ea4307eb995e6c532e5d31f18f9b4b9a3c8a6b",
+      "configuration_sha256": "73f9fd862b2b2cefa91aaadea4ac13a9fdd42dc88c889101a8e4ebced388b7e3",
+      "card_frequencies": {
+        "LikeU": 4071,
+        "Free": 3287,
+        "Aeromexico Blanca": 1230,
+        "Santander Gold": 551,
+        "Fiesta Rewards Oro": 507,
+        "Aeromexico Platinum": 138,
+        "Santander Platinum": 131,
+        "Fiesta Rewards Platinum": 76,
+        "World Elite": 9
+      }
+    },
+    {
+      "path": "data/outputs/demo_referencia_csv",
+      "rows": 10000,
+      "changes": {
+        "total": 130000,
+        "by_action": {
+          "completar": 130000
+        },
+        "by_policy": {
+          "EXP-01": 40000,
+          "CON-01": 21654,
+          "DIG-01": 19173,
+          "CRO-01": 10000,
+          "SEG-01": 10000,
+          "TAR-01": 10000,
+          "RIE-01": 10000,
+          "USO-01": 9173
+        },
+        "by_field": {
+          "antiguedad_meses": 10000,
+          "segmento": 10000,
+          "tarjeta_santander": 10000,
+          "transacciones_mes": 10000,
+          "gasto_mensual": 10000,
+          "ecommerce_pct": 10000,
+          "uso_tarjeta_pct": 10000,
+          "app_logins_mes": 10000,
+          "satisfaccion": 10000,
+          "nps": 10000,
+          "pagos_puntuales_pct": 10000,
+          "activacion_promos_pct": 10000,
+          "abandono_riesgo": 10000
+        }
+      },
+      "violations_after": 0,
+      "idempotent_after_csv_roundtrip": true,
+      "artifacts_hashes_verified": true,
+      "code_sha256": "98084ee0f5c5ee776dc02c56d7ea4307eb995e6c532e5d31f18f9b4b9a3c8a6b",
+      "configuration_sha256": "73f9fd862b2b2cefa91aaadea4ac13a9fdd42dc88c889101a8e4ebced388b7e3",
+      "card_frequencies": {
+        "LikeU": 3566,
+        "Free": 2943,
+        "Aeromexico Blanca": 1468,
+        "Santander Gold": 950,
+        "Fiesta Rewards Oro": 690,
+        "Aeromexico Platinum": 207,
+        "Santander Platinum": 97,
+        "Fiesta Rewards Platinum": 77,
+        "World Elite": 2
+      }
+    },
+    {
+      "path": "data/outputs/entrega/reparacion",
+      "rows": 6,
+      "changes": {
+        "total": 45,
+        "by_action": {
+          "corregir": 25,
+          "completar": 20
+        },
+        "by_policy": {
+          "CON-01": 9,
+          "EXP-01": 9,
+          "CRO-01": 4,
+          "TAR-01": 4,
+          "DIG-01": 4,
+          "INI-01": 4,
+          "RIE-01": 3,
+          "SEG-01": 3,
+          "USO-01": 3,
+          "DOM-01": 2
+        },
+        "by_field": {
+          "antiguedad_meses": 4,
+          "tarjeta_santander": 4,
+          "gasto_mensual": 4,
+          "uso_tarjeta_pct": 4,
+          "ecommerce_pct": 3,
+          "pagos_puntuales_pct": 3,
+          "abandono_riesgo": 3,
+          "segmento": 3,
+          "transacciones_mes": 3,
+          "app_logins_mes": 2,
+          "satisfaccion": 2,
+          "nps": 2,
+          "activacion_promos_pct": 2,
+          "customer_id": 2,
+          "edad": 2,
+          "ingreso_mensual": 2
+        }
+      },
+      "violations_after": 0,
+      "idempotent_after_csv_roundtrip": true,
+      "artifacts_hashes_verified": true,
+      "code_sha256": "98084ee0f5c5ee776dc02c56d7ea4307eb995e6c532e5d31f18f9b4b9a3c8a6b",
+      "configuration_sha256": "73f9fd862b2b2cefa91aaadea4ac13a9fdd42dc88c889101a8e4ebced388b7e3",
+      "card_frequencies": {
+        "LikeU": 3,
+        "Free": 3
+      }
+    },
+    {
+      "path": "data/outputs/entrega/segunda_reparacion",
+      "rows": 6,
+      "changes": {
+        "total": 0,
+        "by_action": {},
+        "by_policy": {},
+        "by_field": {}
+      },
+      "violations_after": 0,
+      "idempotent_after_csv_roundtrip": true,
+      "artifacts_hashes_verified": true,
+      "code_sha256": "98084ee0f5c5ee776dc02c56d7ea4307eb995e6c532e5d31f18f9b4b9a3c8a6b",
+      "configuration_sha256": "73f9fd862b2b2cefa91aaadea4ac13a9fdd42dc88c889101a8e4ebced388b7e3",
+      "card_frequencies": {
+        "LikeU": 3,
+        "Free": 3
+      }
+    },
+    {
+      "path": "data/examples/reparacion_demostrada",
+      "rows": 6,
+      "changes": {
+        "total": 45,
+        "by_action": {
+          "corregir": 25,
+          "completar": 20
+        },
+        "by_policy": {
+          "CON-01": 9,
+          "EXP-01": 9,
+          "CRO-01": 4,
+          "TAR-01": 4,
+          "DIG-01": 4,
+          "INI-01": 4,
+          "RIE-01": 3,
+          "SEG-01": 3,
+          "USO-01": 3,
+          "DOM-01": 2
+        },
+        "by_field": {
+          "antiguedad_meses": 4,
+          "tarjeta_santander": 4,
+          "gasto_mensual": 4,
+          "uso_tarjeta_pct": 4,
+          "ecommerce_pct": 3,
+          "pagos_puntuales_pct": 3,
+          "abandono_riesgo": 3,
+          "segmento": 3,
+          "transacciones_mes": 3,
+          "app_logins_mes": 2,
+          "satisfaccion": 2,
+          "nps": 2,
+          "activacion_promos_pct": 2,
+          "customer_id": 2,
+          "edad": 2,
+          "ingreso_mensual": 2
+        }
+      },
+      "violations_after": 0,
+      "idempotent_after_csv_roundtrip": true,
+      "artifacts_hashes_verified": true,
+      "code_sha256": "98084ee0f5c5ee776dc02c56d7ea4307eb995e6c532e5d31f18f9b4b9a3c8a6b",
+      "configuration_sha256": "73f9fd862b2b2cefa91aaadea4ac13a9fdd42dc88c889101a8e4ebced388b7e3",
+      "card_frequencies": {
+        "LikeU": 3,
+        "Free": 3
+      }
+    }
+  ],
+  "independent_checks": [
+    "Esquema y columnas en orden",
+    "Identificadores únicos",
+    "Sin faltantes",
+    "Edad y antigüedad",
+    "Mínimos inclusivos por producto",
+    "Dominios y conteos enteros",
+    "Cero compras implica cero gasto",
+    "Idempotencia exacta tras CSV en todas las salidas",
+    "Hashes de todos los artefactos",
+    "Conservación de valores válidos de filas inusuales del ejemplo",
+    "Huella del Excel original intacta"
+  ],
+  "demonstration_parameters_remaining": [
+    "Mínimos de edad e ingreso para contratar y simplificación de ingreso actual",
+    "Distribuciones iniciales sin referencia",
+    "Latentes, afinidades y efectos por tarjeta",
+    "Probabilidades, coeficientes y ruido de segmento, consumo, digitalización, experiencia y pago",
+    "Convención provisional de uso e inactividad",
+    "Score de abandono sin calibración",
+    "Cotas técnicas y edad de inicio de relación"
+  ],
+  "claim": "Coherencia con políticas de simulación, sin afirmar realismo ni representatividad"
+}

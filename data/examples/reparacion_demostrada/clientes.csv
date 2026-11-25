@@ -1,0 +1,7 @@
+customer_id,edad,segmento,antiguedad_meses,ingreso_mensual,tarjeta_santander,uso_tarjeta_pct,transacciones_mes,gasto_mensual,ecommerce_pct,pagos_puntuales_pct,app_logins_mes,nps,satisfaccion,abandono_riesgo,activacion_promos_pct
+DUP-01,18,Select,0,8000.0,LikeU,0.0,0,0.0,0.0,75.38,14,5,2.3,0.578028,76.84
+SYN-00000000,45,Mass,24,150000.0,Free,45.0,8,200000.0,65.0,90.0,0,10,1.0,0.9,15.0
+SYN-00000001,30,Premier,144,25000.0,Free,52.66,17,5842.05,23.67,61.75,2,5,3.5,0.20816,30.0
+OK-04,60,Premier,240,90000.0,LikeU,25.0,2,100000.0,100.0,0.0,0,0,5.0,0.95,0.0
+INVALID-05,37,Select,0,16325.86,Free,46.89,10,3428.57,40.0,95.0,2,4,3.2,0.4,20.0
+EMPTY-06,41,Mass,67,13117.42,LikeU,98.28,33,2725.8,37.59,68.64,0,8,4.17,0.26481,66.12

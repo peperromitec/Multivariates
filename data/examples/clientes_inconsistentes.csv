@@ -1,0 +1,7 @@
+customer_id,edad,segmento,antiguedad_meses,ingreso_mensual,tarjeta_santander,uso_tarjeta_pct,transacciones_mes,gasto_mensual,ecommerce_pct,pagos_puntuales_pct,app_logins_mes,nps,satisfaccion,abandono_riesgo,activacion_promos_pct
+DUP-01,18,Select,120,8000,World Elite,60,0,20000,80,101,-3,12,6,1.2,-5
+DUP-01,45,Mass,24,150000,Free,45,8,200000,65,90,0,10,1,0.9,15
+,30,,200,25000,,150,-4,-10,120,,2,5,3.5,0.2,30
+OK-04,60,Premier,240,90000,LikeU,25,2,100000,100,0,0,0,5,0.95,0
+INVALID-05,abc,Otro,-2,-500,Producto desconocido,,3.5,1200,40,95,2,4,3.2,0.4,20
+EMPTY-06,,,,,,,,,,,,,,,
